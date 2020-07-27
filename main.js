@@ -55,4 +55,4 @@ client.on('message', message =>{
 
 
 // This login must be the last line 
-client.login('NzM1MTYyMTY3NzExNjI5Mzk1.XxcPSw.pMp7GboJQ5ReMtMH-1ZoBqb0DHA');
+client.login(token);

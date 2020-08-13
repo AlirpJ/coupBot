@@ -5,11 +5,26 @@ const prefix = '-';
 const fs = require('fs');
 const { start } = require('repl');
 
-const PLAYER =  '735176300335202345';
-const DEAD =    '735176229899993202';
+const PLAYER        = '735176300335202345';
+const DEAD          = '735176229899993202';
+const playerOne     = '743496733711007857';
+const playerTwo     = '743496738752430220';
+const playerThree   = '743496740635672626';
+const playerFour    = '743496742061736036';
+
+
+
 let parts = new Array ();
 var coupBegin = false;
-var playerCount = 0;
+
+var playerCount = {
+    getPlayers: function() {
+        return players;
+    },
+    setPlayers: function(x){
+        players = x;
+    }
+}
 client.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
@@ -24,24 +39,36 @@ client.once('ready', () => {
     console.log('CoupBot is online!');
 });
 
-// Command Line: "node ." to start bot
+// Command Line: "node ." to start bot (after set to correct directory via "cd")
 client.on('message', message =>{
     if(!message.content.startsWith(prefix) || message.author.bot) return;
+    //parts is currently unused, can delete?
     parts = message.content.split(' ');
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const command = args.shift().toLowerCase();
 
 
-    if (parts[0] == 'role'){
-        if(parts[1] == 'ready'){
-            message.member.addRole(PLAYER);
-            message.reply(' you are readied up!');
-            playerCount++;
+    if (command == 'readyup'){
+        message.member.addRole(PLAYER);
+
+        if(getPlayers == 0){
+            message.member.addRole(playerOne);
         }
+        if(getPlayers == 1){
+            message.member.addRole(playerTwo);
+        }
+        if(getPlayers == 2){
+            message.member.addRole(playerThree);
+        }
+        if(getPlayers == 3){
+            message.member.addRole(playerFour);
+        }
+        else{
+            message.channel.send("Sorry. Maximum players reached! Do '-reset' to try again.")
+        }
+        client.commands.get('readyUp').execute(message, args);
     }
-
-
     else if(command == 'ping'){
         client.commands.get('ping').execute(message, args);
     }
@@ -53,7 +80,10 @@ client.on('message', message =>{
         console.log("");
         message.channel.send("Information has been sent to console!");
     }
-
+    else if(command == 'reset'){
+        setPlayers(0);
+        startFalse();
+    }
 
 
 
